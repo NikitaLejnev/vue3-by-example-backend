@@ -2,9 +2,10 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const router = express.Router();
 const verifyToken = require("../middlewares/verify-token");
+const { createDb } = require("./helper");
 
 router.get("/", (req, res, next) => {
-  const db = new sqlite3.Database("./db.sqlite");
+  const db = createDb();
   db.serialize(() =>
     db.all(
       `
@@ -26,7 +27,7 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", (req, res) => {
-  const db = new sqlite3.Database("./db.sqlite");
+  const db = createDb();
   const {
     catalogItemId,
     name,
@@ -64,7 +65,7 @@ router.post("/", (req, res) => {
 });
 
 router.delete("/:id", verifyToken, (req, res) => {
-  const db = new sqlite3.Database("./db.sqlite");
+  const db = createDb();
   const { id } = req.params;
   db.serialize(() => {
     const stmt = db.prepare(

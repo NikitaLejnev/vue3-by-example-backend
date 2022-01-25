@@ -2,9 +2,10 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const router = express.Router();
 const verifyToken = require("../middlewares/verify-token");
+const { createDb } = require("./helper");
 
 router.get("/", (req, res, next) => {
-  const db = new sqlite3.Database("./db.sqlite");
+  const db = createDb();
   db.serialize(() => {
     db.all("SELECT * FROM catalog_items", [], (err, rows = [])
       => {
@@ -16,7 +17,7 @@ router.get("/", (req, res, next) => {
 
 router.post('/', verifyToken, (req, res) => {
   const { name, description, imageUrl } = req.body;
-  const db = new sqlite3.Database('./db.sqlite');
+  const db = createDb();
   db.serialize(() => {
     const stmt = db.prepare(`
     INSERT INTO catalog_items (
@@ -33,7 +34,7 @@ router.post('/', verifyToken, (req, res) => {
 
 router.delete('/:id', verifyToken, (req, res) => {
   const { id } = req.params;
-  const db = new sqlite3.Database('./db.sqlite'):
+  const db = createDb();
   db.serialize(() => {
     const stmt = db.prepare("DELETE FROM catalog_items WHERE id = (?)");
     stmt.run(id);
