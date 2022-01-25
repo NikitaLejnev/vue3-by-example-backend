@@ -1,8 +1,10 @@
-const express = require("express");
-const sqlite3 = require("sqlite3").verbose();
-const router = express.Router();
-const verifyToken = require("../middlewares/verify-token");
-const { createDb } = require("./helper");
+const {
+  createDb,
+  express,
+  sqlite3,
+  router,
+  verifyToken,
+} = require("./helper");
 
 router.get("/", (req, res, next) => {
   const db = createDb();
