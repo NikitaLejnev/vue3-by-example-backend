@@ -1,11 +1,9 @@
-const {
-  express,
-  sqlite3,
-  router,
-  verifyToken,
-} = require("./helper");
+const express = require("express");
+const router = express.Router();
+const sqlite3 = require("sqlite3").verbose();
+const verifyToken = require("../middlewares/verify-token");
 
-router.get("/", (req, res, next) => {
+router.get("/", (req, res) => {
   const db = new sqlite3.Database("./db.sqlite");
   db.serialize(() => {
     db.all(
@@ -25,7 +23,9 @@ router.post("/", verifyToken, (req, res) => {
   db.serialize(() => {
     const stmt = db.prepare(`
     INSERT INTO catalog_items (
-      name, description, image_url
+      name,
+      description,
+      image_url
     ) VALUES (?, ?, ?)
   `);
     stmt.run(name, description, imageUrl);

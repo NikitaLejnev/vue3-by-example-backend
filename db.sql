@@ -15,5 +15,6 @@ CREATE TABLE bookings (
   address TEXT NOT NULL,
   start_date TEXT NOT NULL,
   end_date TEXT NOT NULL,
-  FOREIGN KEY (catalog_item_id) REFERENCES catalog_items(id);
+  FOREIGN KEY (catalog_item_id) REFERENCES catalog_items(id)
 );
+
