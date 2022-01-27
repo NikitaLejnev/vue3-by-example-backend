@@ -1,5 +1,4 @@
 const {
-  createDb,
   express,
   sqlite3,
   router,
@@ -7,7 +6,7 @@ const {
 } = require("./helper");
 
 router.get("/", (req, res, next) => {
-  const db = createDb();
+  const db = new sqlite3.Database("./db.sqlite");
   db.serialize(() =>
     db.all(
       `
@@ -29,7 +28,7 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", (req, res) => {
-  const db = createDb();
+  const db = new sqlite3.Database("./db.sqlite");
   const {
     catalogItemId,
     name,
@@ -67,7 +66,7 @@ router.post("/", (req, res) => {
 });
 
 router.delete("/:id", verifyToken, (req, res) => {
-  const db = createDb();
+  const db = new sqlite3.Database("./db.sqlite");
   const { id } = req.params;
   db.serialize(() => {
     const stmt = db.prepare(
